@@ -2,20 +2,35 @@ import pygame as py
 
 py.init()
 
-win = py.display.set_mode((500,500))
+win = py.display.set_mode((720,390))
+
+bg = py.image.load("dungeonBackground.png")
+py.Surface.convert_alpha(bg)
+
+idle = py.image.load("knight.png")
+
 
 class Player:
     def __init__(self, x, y):
-        x = self.x
-        y = self.y
-        dr = 1
+        self.x = x
+        self.y = y
+        self.dr = 1
     
     def draw(self, win):
-        py.draw.rect(win, (255,0,0), (20, 40, 50, 50))
+        win.blit(idle, (self.x, self.y))
+
+player = Player(50,250)
 
 run = True
 
+def makeScreen():
+    win.blit(bg, (0,0))
+    player.draw(win)
+    py.display.update()
+
 while run:
+    makeScreen()
     for event in py.event.get():
         if event.type==py.QUIT:
             py.quit()
+            run = False
