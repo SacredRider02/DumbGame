@@ -5,6 +5,8 @@ py.init()
 
 win = py.display.set_mode((720,390))
 
+font = py.font.SysFont("Comicsans", 30, True)
+
 bg = py.image.load("dungeonBackground.png").convert_alpha()
 
 idle = py.image.load("commando.png").convert_alpha()
@@ -24,7 +26,7 @@ class Player:
 
 player = Player(50,248)
 
-class Enemy:
+class Enemy1:
     def __init__(self, x, dr):
         self.x = x
         self.dr = dr
@@ -43,13 +45,16 @@ class Bullet:
         py.draw.rect(win, (255,0,0), (self.x, self.y, 15, 5))
 
 run = True
+global jump, hp
 jump = False
 bullets = []
 shoot = False
+hp = 10
 r = 1
 enemies = []
 
 def makeScreen():
+    global jump, upspeed, hp
     win.blit(bg, (0,0))
     
     for bullet in bullets:
@@ -59,15 +64,30 @@ def makeScreen():
         bullet.draw(win)
 
     for enemy in enemies:
+
+        if jump == False and player.x in range(enemy.x-5, enemy.x):
+            hp -= 1
+            jump = True
+            upspeed = 16
+            player.y -= upspeed
+            if player.dr:
+                player.x += 50
+            player.x-= 25
+
         if len(bullets) > 0:
             for bullet in bullets:
                 if enemy.x not in range(bullet.x-20, bullet.x+20):
                     enemy.draw(win)
+                elif enemy.x in range(bullet.x-20, bullet.x+20) and enemy.dr != bullet.dr:
+                    bullets.remove(bullet)
                 else:
                     bullets.remove(bullet)
                     enemies.remove(enemy)
 
         else:enemy.draw(win)
+
+    health = font.render("Health: "+str(hp), True, (255,0,0))
+    win.blit(health, (30, 20))
     
     player.draw(win)
     
@@ -75,13 +95,13 @@ def makeScreen():
 
 while run:
 
-    global shield
+    global shield, upspeed
     
     if r % 80 == 0:
         pos = random.randint(0,680)
         while pos in range(player.x-60, player.x+60):
             pos = random.randint(0,680)
-        enemies.append(Enemy(pos, True if pos > player.x else False))
+        enemies.append(Enemy1(pos, True if pos > player.x else False))
 
     if r % 160 == 0 and len(enemies) > 3:
         enemies.pop(random.randint(0, len(enemies)-1))
