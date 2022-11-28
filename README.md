@@ -1,4 +1,4 @@
-# DumbGame
+# Dungeon Survival
 Shooter game. You are eternally trapped in the dungeon. How long will you survive? 
 
 Press -> right arrow and <- left arrow to move.
