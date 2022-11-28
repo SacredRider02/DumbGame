@@ -6,6 +6,8 @@ Press ^ up arrow to jump
 Press spacebar to shoot.
 You have 10 hp. You lose an hp if you touch a knight or an enemy bullet.
 
-enjoy
+To play the game, install pygame to your computer, download the files and run the code
+
+enjoy!!
 
 Created by Yasar Guzel
