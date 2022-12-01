@@ -136,56 +136,66 @@ def makeScreen():
     py.display.update()
 
 while run:
+    player.x = 50
+    player.y = 248
+    run = True
+    jump = False
+    bullets = []
+    enemy_bullets = []
+    shoot = False
+    hp, r, effectlasts = 10, 1, 0
 
-    global shield, upspeed
-    
-    if r % 80 == 0:
-        pos = random.randint(0,680)
-        while pos in range(player.x-60, player.x+60):
+    enemies = []
+    while hp > 0:
+        global shield, upspeed
+        
+        if r % 80 == 0:
             pos = random.randint(0,680)
-        enemies.append(random.choice([Enemy1(pos, True if pos > player.x else False), Enemy2(pos, True if pos > player.x else False, r)]))
+            while pos in range(player.x-60, player.x+60):
+                pos = random.randint(0,680)
+            enemies.append(random.choice([Enemy1(pos, True if pos > player.x else False), Enemy2(pos, True if pos > player.x else False, r)]))
 
-    if r % 160 == 0 and len(enemies) > 3:
-        enemies.pop(random.randint(0, len(enemies)-1))
-    
-    py.time.delay((30))
+        if r % 160 == 0 and len(enemies) > 3:
+            enemies.pop(random.randint(0, len(enemies)-1))
+        
+        py.time.delay((30))
 
-    keys = py.key.get_pressed()
+        keys = py.key.get_pressed()
 
-    if jump and player.y < 248:
-        upspeed-=2
-        player.y -= upspeed
-    else:jump = False
-   
-    if keys[py.K_RIGHT] and player.x <= 687 and shield == False:
-        player.x += 5
-        player.dr=False
+        if jump and player.y < 248:
+            upspeed-=2
+            player.y -= upspeed
+        else:jump = False
     
-    if keys[py.K_LEFT] and player.x >= 5 and shield == False:
-        player.x -= 5
-        player.dr = True
-    
-    if keys[py.K_UP] and not jump and shield == False:
-        jump = True
-        upspeed = 16
-        player.y -= upspeed
-    
-    if keys[py.K_DOWN]:
-        shield = True
-    else:shield = False
+        if keys[py.K_RIGHT] and player.x <= 687 and shield == False:
+            player.x += 5
+            player.dr=False
+        
+        if keys[py.K_LEFT] and player.x >= 5 and shield == False:
+            player.x -= 5
+            player.dr = True
+        
+        if keys[py.K_UP] and not jump and shield == False:
+            jump = True
+            upspeed = 16
+            player.y -= upspeed
+        
+        if keys[py.K_DOWN]:
+            shield = True
+        else:shield = False
 
-    if shoot == True and r % 10 == 0:
-        bullets.append(Bullet(player.x, player.y+30, player.dr))
-        effectlasts = 3
-        shoot = False
-    
-    if keys[py.K_SPACE] and shield == False:
-        shoot = True
-    
-    r += 1
+        if shoot == True and r % 10 == 0:
+            bullets.append(Bullet(player.x, player.y+30, player.dr))
+            effectlasts = 3
+            shoot = False
+        
+        if keys[py.K_SPACE] and shield == False:
+            shoot = True
+        
+        r += 1
 
-    makeScreen()
-    for event in py.event.get():
-        if event.type==py.QUIT:
-            py.quit()
-            run = False
+        makeScreen()
+        for event in py.event.get():
+            if event.type==py.QUIT:
+                py.quit()
+                run = False
